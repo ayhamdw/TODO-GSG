@@ -33,3 +33,11 @@ addButton.addEventListener("click", () => {
         taskInput.value = "";
     }
 });
+
+const taskList = document.getElementById('taskList')
+taskList.addEventListener('click' , function(e) {
+    if (e.target.tagName === 'BUTTON') {
+        const taskItem = e.target.closest('.task-item');
+        taskItem.remove();
+    }
+});
