@@ -3,9 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <title>To-Do List</title>
 </head>
 <body>
-    
+    <div class="task-container">
+        <h1 class="task-title">To-Do List</h1>
+        <div class="task-input">
+            <input type="text" id="taskInput" placeholder="Add a new task">
+            <button id="addTaskButton">Add Task</button>
+        </div>
+        <div class="task-list">
+            <ul id="taskList">
+                <div class="task-item">
+                    <input type="checkbox" name="task1" id="task1">
+                    <label for="task1">Task 1</label>
+                    <button class="delete-task-button">Delete</button>
+                    <div class="item-seperator"></div>
+                </div>
+            </ul>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
