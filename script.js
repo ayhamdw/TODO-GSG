@@ -1,6 +1,6 @@
 const addButton = document.getElementById("addTaskButton");
 const taskInput = document.getElementById("taskInput");
-
+const body = document.body;
 
 function addNewItem (task) {
     const taskList = document.getElementById("taskList");
@@ -44,5 +44,15 @@ taskList.addEventListener('click' , function(e) {
     if (e.target.tagName === 'INPUT' && e.target.type === 'checkbox') {
         const taskItem = e.target.closest('.task-item');
         taskItem.classList.toggle('completed');
+    }
+});
+
+taskInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+        const task = taskInput.value.trim();
+        if (task) {
+            addNewItem(task);
+            taskInput.value = "";
+        }
     }
 });
