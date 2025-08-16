@@ -40,4 +40,9 @@ taskList.addEventListener('click' , function(e) {
         const taskItem = e.target.closest('.task-item');
         taskItem.remove();
     }
+
+    if (e.target.tagName === 'INPUT' && e.target.type === 'checkbox') {
+        const taskItem = e.target.closest('.task-item');
+        taskItem.classList.toggle('completed');
+    }
 });

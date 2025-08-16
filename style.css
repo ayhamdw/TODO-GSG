@@ -6,9 +6,9 @@
 
 .task-container {
     max-width: 600px;
-    margin: 0 auto;
+    margin: 20px auto;
     padding: 20px;
-    background-color: #f9f9f9;
+    background-color: #fffdfd;
     border: 1px solid #eee;
     border-radius: 5px;
 }
@@ -96,7 +96,7 @@
     margin: 5px 0;
 }
 
-.task-item .completed {
+.task-item.completed label {
     text-decoration: line-through;
     color: #6b7277;
 }
