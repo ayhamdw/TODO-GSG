@@ -30,6 +30,7 @@ addButton.addEventListener("click", () => {
     const task = taskInput.value.trim();
     if (task) {
         addNewItem(task);
+        saveTasks(task);
         taskInput.value = "";
     }
 });
@@ -39,6 +40,7 @@ taskList.addEventListener('click' , function(e) {
     if (e.target.tagName === 'BUTTON') {
         const taskItem = e.target.closest('.task-item');
         taskItem.remove();
+        deleteTask(taskItem.querySelector("label").textContent);
     }
 
     if (e.target.tagName === 'INPUT' && e.target.type === 'checkbox') {
@@ -56,3 +58,22 @@ taskInput.addEventListener("keydown", (event) => {
         }
     }
 });
+
+function loadTasks() {
+    const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+    tasks.forEach(task => addNewItem(task));
+}
+
+function saveTasks(task) {
+    const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+    tasks.push(task);
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+function deleteTask(task) {
+    const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+    const updatedTasks = tasks.filter(t => t !== task);
+    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+}
+
+document.addEventListener("DOMContentLoaded", loadTasks);
