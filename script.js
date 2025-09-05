@@ -2,17 +2,21 @@ const addButton = document.getElementById("addTaskButton");
 const taskInput = document.getElementById("taskInput");
 const body = document.body;
 
-function addNewItem (task) {
+function addNewItem(taskObj) {
     const taskList = document.getElementById("taskList");
     const newTaskItem = document.createElement("div");
     newTaskItem.classList.add("task-item");
+    if (taskObj.completed) {
+        newTaskItem.classList.add("completed");
+    }
     const taskCheckbox = document.createElement("input");
     taskCheckbox.type = "checkbox";
-    taskCheckbox.name = task;
-    taskCheckbox.id = task;
+    taskCheckbox.name = taskObj.id;
+    taskCheckbox.id = taskObj.id;
+    taskCheckbox.checked = !!taskObj.completed;
     const taskLabel = document.createElement("label");
-    taskLabel.htmlFor = task;
-    taskLabel.textContent = task;
+    taskLabel.htmlFor = taskObj.id;
+    taskLabel.textContent = taskObj.text;
     const deleteButton = document.createElement("button");
     deleteButton.classList.add("button");
     deleteButton.textContent = "Delete";
@@ -27,52 +31,80 @@ function addNewItem (task) {
 }
 
 addButton.addEventListener("click", () => {
-    const task = taskInput.value.trim();
-    if (task) {
-        addNewItem(task);
-        saveTasks(task);
+    const taskText = taskInput.value.trim();
+    if (taskText) {
+        const taskObj = {
+            id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
+            text: taskText,
+            completed: false
+        };
+        addNewItem(taskObj);
+        saveTasks(taskObj);
         taskInput.value = "";
     }
 });
 
 const taskList = document.getElementById('taskList')
-taskList.addEventListener('click' , function(e) {
+taskList.addEventListener('click', function(e) {
     if (e.target.tagName === 'BUTTON') {
         const taskItem = e.target.closest('.task-item');
+        const taskId = taskItem.querySelector("input[type='checkbox']").id;
         taskItem.remove();
-        deleteTask(taskItem.querySelector("label").textContent);
+        deleteTask(taskId);
     }
 
     if (e.target.tagName === 'INPUT' && e.target.type === 'checkbox') {
         const taskItem = e.target.closest('.task-item');
+        const taskId = e.target.id;
         taskItem.classList.toggle('completed');
+        toggleTaskCompleted(taskId, e.target.checked);
     }
 });
 
 taskInput.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
-        const task = taskInput.value.trim();
-        if (task) {
-            addNewItem(task);
+        const taskText = taskInput.value.trim();
+        if (taskText) {
+            const taskObj = {
+                id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
+                text: taskText,
+                completed: false
+            };
+            addNewItem(taskObj);
+            saveTasks(taskObj);
             taskInput.value = "";
         }
     }
 });
 
+
 function loadTasks() {
     const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-    tasks.forEach(task => addNewItem(task));
+    tasks.forEach(taskObj => addNewItem(taskObj));
 }
 
-function saveTasks(task) {
+
+function saveTasks(taskObj) {
     const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-    tasks.push(task);
+    tasks.push(taskObj);
     localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
-function deleteTask(task) {
+
+function deleteTask(taskId) {
     const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-    const updatedTasks = tasks.filter(t => t !== task);
+    const updatedTasks = tasks.filter(t => t.id !== taskId);
+    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+}
+
+function toggleTaskCompleted(taskId, completed) {
+    const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+    const updatedTasks = tasks.map(t => {
+        if (t.id === taskId) {
+            return { ...t, completed };
+        }
+        return t;
+    });
     localStorage.setItem("tasks", JSON.stringify(updatedTasks));
 }
 
